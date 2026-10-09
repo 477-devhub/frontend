@@ -56,4 +56,4 @@ src/fixtures/backend-api-v1.2.json: 백엔드 docs/api-examples-v1.2.json의 사
 커밋·push는 이번 작업에서 수행하지 않았습니다.
 
 ## 다각도 시나리오
-새 설정과 영상 배치는 docs/DEMO_SCENARIO.md 참조. CAM1-3 사건1건/대표CAM2, 독립CAM6 임시사건후보 예시이며 나머지구역의 내용은 미정입니다. 헤더 연결 설정에 녹화 영상 전체 재생 제어가 있습니다. 입력 영상은 아직 없으며 재생 검증은 미완료입니다.
+새 설정과 영상 배치는 docs/DEMO_SCENARIO.md 참조. CAM1-3 사건1건/대표CAM2, 독립CAM6 임시사건후보 예시이며 나머지구역의 내용은 미정입니다. 헤더 연결 설정에 녹화 영상 전체 재생 제어가 있습니다. 현재 사용자 제공 녹화 영상 9개(서로 다른 원본9개)를 배치했고 실제 재생/종료를 확인했습니다. 실제 AI 분석 시연은 docs/MONITORING_CYCLE.md의 development/cascade_v1 실행을 사용합니다.

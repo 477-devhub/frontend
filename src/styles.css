@@ -26,8 +26,7 @@
 
   --font-kr: 'Noto Sans KR', system-ui, sans-serif;
   --font-num: 'Inter', 'Noto Sans KR', system-ui, sans-serif;
-  /* 3열 타일이 420px(2.1:1)까지만 넓어지도록 한 폭 */
-  --page-max: 1792px;
+  --page-max: 1600px;
 }
 
 *,
@@ -43,7 +42,7 @@ body {
   color: var(--t1);
   font-family: var(--font-kr);
   font-size: 13px;
-  line-height: normal;
+  line-height: 1.2;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -131,6 +130,7 @@ img {
 }
 
 .app {
+  margin: 0 auto;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -140,13 +140,14 @@ img {
 /* Header */
 
 .header {
+  height: 64px;
   background: var(--ink);
   border-bottom: 1px solid var(--inkline);
 }
 
 .header-inner {
   max-width: var(--page-max);
-  height: 64px;
+  height: 63px;
   margin: 0 auto;
   padding: 0 24px;
   display: flex;
@@ -486,7 +487,7 @@ img {
   display: flex;
   flex-direction: column;
   gap: 12px;
-  padding: 14px 22px;
+  padding: 18px 22px 14px;
 }
 
 .analysis-head {
@@ -787,6 +788,7 @@ img {
 }
 
 .hero-ratio strong {
+  line-height: 87px;
   font-family: var(--font-num);
   font-size: 72px;
   font-weight: 700;
@@ -1034,11 +1036,15 @@ img {
 }
 
 .incident-cam {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
   font-weight: 500;
   color: var(--t2);
 }
 
 .incident-status {
+  flex-shrink: 0;
   display: flex;
   align-items: center;
   gap: 6px;
@@ -1057,7 +1063,7 @@ img {
   padding: 10px 16px;
 }
 
-.incident-body > div {
+.incident-info {
   flex: 1;
   min-width: 0;
   display: flex;
@@ -1831,16 +1837,17 @@ button:disabled { opacity:.5; cursor:not-allowed; }
 .hero,.queue-empty,.today,.incident,.excluded {flex-shrink:0;}
 .hero p {padding:0;}
 .hero-field {align-self:flex-start;}
-.incident-body .evidence-image {width:80px; height:63px; object-fit:cover; border-radius:8px;}
+.incident-body .evidence-image {width:112px; height:63px; object-fit:cover; border-radius:8px;}
+.incident-body .media-placeholder {flex:0 0 112px; display:flex; align-items:center; justify-content:center; padding:8px; font-size:11px; background:var(--sand);}
 
-/* HACKATHON-DAY: fit the CCTV wall without an inner scrollbar. */
+/* Figma 50:1185: 1088px wall, nine 356 x 200px tiles, 218px analysis. */
 @media (min-width:1181px) {
   .left {overflow:hidden;}
-  .left > .wall {flex:1; min-height:0;}
+  .left > .wall {flex:none; min-height:0;}
   .left > .analysis {flex:0 0 218px; height:218px; min-height:218px;}
   .wall-head {flex-shrink:0;}
-  .wall > .grid {flex:1; min-height:0; grid-auto-rows:minmax(0,1fr);}
-  .wall .tile-md {height:100%; min-height:0;}
+  .wall > .grid {flex:none; min-height:0; grid-auto-rows:200px;}
+  .wall .tile-md {height:200px; min-height:0;}
 }
 
 /* HACKATHON-DAY: Figma 76:1608 detail proportions, data supplied by API. */
@@ -1871,3 +1878,59 @@ button:disabled { opacity:.5; cursor:not-allowed; }
 .playback-controls > div {display:flex; gap:6px;}
 .same-event .tile-sm {width:150px; height:84px;}
 .same-event-text {min-width:0;}
+[hidden] {display:none!important;}
+.monitoring-controls {display:flex;align-items:center;gap:10px;flex:none;}
+.sample-data-label {color:var(--t2);font-size:12px;white-space:nowrap;}
+.monitoring-controls .btn-primary {flex:none;min-width:76px;padding:8px 16px;}
+.tile-shade,.tile-label,.tile-chip,.tile-time {z-index:2;}
+.tile[data-tone]::after {z-index:3;}
+.incident-body h3,.incident-body p {display:-webkit-box;-webkit-box-orient:vertical;overflow:hidden;overflow-wrap:anywhere;}
+.incident-body h3 {-webkit-line-clamp:2;}
+.incident-body p {-webkit-line-clamp:2;}
+.wall > .grid > div {min-height:0;}
+.console-notices {top:76px;}
+
+.incident:focus-visible {outline:2px solid var(--onink); outline-offset:3px;}
+.incident:hover {border-color:var(--tone);}
+.header-tools summary.user {font-size:12px; list-style:none;}
+.header-tools summary.user::-webkit-details-marker {display:none;}
+.connection-tools {top:40px;}
+.header-inner .brand,.header-inner .status {flex-shrink:0;}
+.steps {flex-shrink:0;}
+.status {gap:12px;}
+.sample-data-label {font-size:11px;}
+.monitoring-controls {gap:6px;}
+.monitoring-controls .btn-primary {min-width:60px; padding:6px 12px; font-size:12px;}
+.tile-chip[data-tone='neutral'] {background:rgba(20,18,13,.55); color:var(--onink2); font-weight:500;}
+.incident-info {min-height:63px;}
+.incident {min-height:166px;}
+
+@media (max-width:1180px) {
+  .header {height:auto;}
+  .header-inner {gap:12px;}
+  .steps {order:3; width:100%; justify-content:center; overflow-x:auto;}
+  .wall-head {gap:12px; flex-wrap:wrap;}
+  .wall-title {white-space:normal; flex-wrap:wrap;}
+  .body {padding:16px; gap:16px;}
+  .analysis-head {flex-wrap:wrap;}
+  .track {width:clamp(80px,30vw,330px);}
+}
+@media (max-width:720px) {
+  .header-inner {padding:12px 16px;}
+  .header-inner .status {flex-wrap:wrap;}
+  .header-inner .brand {gap:8px;}
+  .steps {justify-content:flex-start;}
+  .step {padding:6px 10px;}
+  .hero-msg b {font-size:12px;}
+  .hero-ratio strong {font-size:60px;}
+  .hero-total {font-size:24px;}
+  .incident-head,.incident-body,.incident-foot,.incident-review {padding-left:12px; padding-right:12px;}
+  .incident-head {gap:6px;}
+  .incident-status {gap:4px; font-size:11px;}
+  .incident-status > span {display:none;}
+  .incident-foot {gap:7px;}
+  .incident-low {font-size:11px;}
+  .ticks {gap:2px;}
+  .ticks i {width:4px;}
+  .legend {flex-wrap:wrap;}
+}

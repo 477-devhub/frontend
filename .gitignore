@@ -2,3 +2,6 @@ node_modules
 dist
 
 .test-dist/
+
+# User supplied local demo videos
+/public/mock-cctv-media/

@@ -17,7 +17,7 @@ export function useFitScale(): CSSProperties | undefined {
         return
       }
       const zoom = Math.min(1, w / DESIGN_WIDTH, h / DESIGN_HEIGHT)
-      setStyle({ zoom, width: w / zoom, height: h / zoom, minHeight: 0 })
+      setStyle({ zoom, width: DESIGN_WIDTH, height: DESIGN_HEIGHT, minHeight: 0 })
     }
     update()
     window.addEventListener('resize', update)
