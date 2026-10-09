@@ -1842,3 +1842,32 @@ button:disabled { opacity:.5; cursor:not-allowed; }
   .wall > .grid {flex:1; min-height:0; grid-auto-rows:minmax(0,1fr);}
   .wall .tile-md {height:100%; min-height:0;}
 }
+
+/* HACKATHON-DAY: Figma 76:1608 detail proportions, data supplied by API. */
+.detail-video {position:relative; min-height:0; border-radius:10px; overflow:hidden;}
+.detail-video > .tile-lg {height:100%; min-height:0; flex:none;}
+.detail-camera-meta {font-size:12px; color:var(--t3); white-space:nowrap;}
+.detail-title h1 {overflow:hidden; text-overflow:ellipsis;}
+.timeline-empty {display:block; padding-top:18px; font-size:12px; color:var(--t3);}
+.detail-primary-actions {display:flex; gap:8px;}
+.detail-primary-actions .btn {flex:1; min-width:0;}
+.handover-tools summary {cursor:pointer; font-size:12px; color:var(--t2);}
+@media (min-width:1181px) {
+ .detail-left {overflow:hidden;}
+ .detail-left > .detail-title {flex:none; flex-wrap:nowrap;}
+ .detail-video {flex:1;}
+ .detail-left > .moments {flex:0 0 128px;}
+ .detail-left > .same-event {flex:0 0 155px; min-height:155px;}
+ .detail-right > .risk {flex:none;}
+ .detail-right > .why {flex-shrink:0;}
+ .detail-right > .next-action {flex-shrink:0; gap:8px;}
+}
+@media (max-width:1180px) {
+ .detail-video {height:auto; aspect-ratio:16/9;}
+ .detail-camera-meta {white-space:normal;}
+}
+
+.playback-controls {display:flex; flex-direction:column; gap:8px;}
+.playback-controls > div {display:flex; gap:6px;}
+.same-event .tile-sm {width:150px; height:84px;}
+.same-event-text {min-width:0;}

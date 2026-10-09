@@ -1,3 +1,4 @@
+import { PlaybackProvider, PlaybackControls } from './scenario/playback'
 import { useEffect, useState } from 'react'
 import { Header } from './components/Header'
 import { CctvWall } from './components/CctvWall'
@@ -31,11 +32,12 @@ function ConsoleApp({mode}:{mode:SourceMode}){
  }
  const canMutate=state.busy||state.viewState!=='ready'
  const connected=mode==='api'&&state.connection==='connected'
- return <div className="app" style={fit}>
+ return <PlaybackProvider scenario={state.scenario}><div className="app" style={fit}>
   <Header step={step} onStep={n=>void menuStep(n)} disabled={state.busy||(!!state.snapshot?.is_demo&&state.viewState!=='ready')} clock={clock} connection={(mode==='local'?'로컬':connected?'API 연결':'연결 대기')+(state.snapshot?.is_demo||mode==='local'?' · 합성 데모':'')}>
-  <section className="connection-tools" aria-label="데이터 연결 설정"><b>{mode==='local'?'로컬 fixture':connected?'백엔드 API 연결됨':'백엔드 연결 확인 중'} · {state.snapshot?.is_demo || mode==='local'?'합성 데모':'개발 입력'}</b>
+  <section className="connection-tools" aria-label="데이터 연결 설정"><b>{mode==='local'?'로컬 fixture':connected?'백엔드 API 연결됨':'백엔드 연결 확인 중'} · {state.snapshot?.is_demo || mode==='local'?state.scenario?'시나리오 판단 · AI 미연결':'합성 데모':'개발 입력'}</b>
    <a href={mode==='local'?'/?source=api':'/?source=local'}>{mode==='local'?'API 모드':'로컬 모드'}</a>
    {mode==='local'?<label>표시 상태 <select value={state.viewState} onChange={e=>state.setViewState(e.target.value as ViewState)}><option value="ready">로컬 데이터</option><option value="loading">로딩 예시</option><option value="error">오류 예시</option><option value="stale">오래된 데이터 예시</option></select></label>:<><button type="button" className="btn" disabled={state.busy} onClick={()=>void state.retry()}>다시 조회</button></>}
+   <PlaybackControls/>
   </section>
   </Header>
   <div className="console-notices">
@@ -43,5 +45,5 @@ function ConsoleApp({mode}:{mode:SourceMode}){
   {state.error&&<div className="connection-banner" role="alert">{state.error}</div>}{step===6&&state.detailError&&<div className="connection-banner" role="alert">{state.detailError}</div>}{state.message&&<div className="action-feedback" role="status">{state.message}</div>}
   </div>
   {!state.snapshot?<p className="wall-empty">데이터 대기 중 · 로컬 예시로 자동 대체하지 않습니다.</p>:step===6?<DetailView key={selectedId} remote={mode==='api'} snapshot={state.snapshot} incident={state.incident} clip={state.clip} busy={canMutate} onBack={()=>goTo(listStep)} onOpen={open} onAck={state.ack}/>:<main className="body"><div className="left"><CctvWall key={step} remote={mode==='api'} snapshot={state.snapshot}/><AnalysisPanel snapshot={state.snapshot}/></div><QueuePanel remote={mode==='api'} snapshot={state.snapshot} suppressed={state.suppressed} busy={canMutate} onOpen={open} onVerify={id=>state.ack(id,{action:'verify'})} onRestore={state.restore}/></main>}
- </div>
+ </div></PlaybackProvider>
 }

@@ -8,6 +8,7 @@
 ```powershell
 cd C:\477\backend
 $env:APP_MODE = "demo"
+$env:DEMO_SCENARIO_PATH = "config/demo-scenario.json"
 $env:CORS_ORIGINS = "http://localhost:5173,http://127.0.0.1:5173"
 .\.venv-test\Scripts\python.exe -m uvicorn app.main:app --host 127.0.0.1 --port 8000 --workers 1
 ```
@@ -53,3 +54,6 @@ src/fixtures/backend-api-v1.2.json: 백엔드 docs/api-examples-v1.2.json의 사
 팀 push 대상: https://github.com/477-devhub/frontend.git
 백엔드 팀 저장소: https://github.com/477-devhub/backend.git
 커밋·push는 이번 작업에서 수행하지 않았습니다.
+
+## 다각도 시나리오
+새 설정과 영상 배치는 docs/DEMO_SCENARIO.md 참조. CAM1-3 사건1건/대표CAM2, 독립CAM6 임시사건후보 예시이며 나머지구역의 내용은 미정입니다. 헤더 연결 설정에 녹화 영상 전체 재생 제어가 있습니다. 입력 영상은 아직 없으며 재생 검증은 미완료입니다.

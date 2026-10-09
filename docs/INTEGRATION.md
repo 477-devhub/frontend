@@ -45,3 +45,6 @@ HACKATHON-DAY: CCTV wall uses available vertical space with bounded grid rows on
 HACKATHON-DAY: Removed desktop CCTV grid/tile height caps. Grid rows equally fill all remaining wall height above the analysis panel without inner scrolling.
 
 HACKATHON-DAY: Fixed the actual flex allocation conflict: analysis previously retained flex:1 alongside wall flex:1. Desktop analysis now uses the Figma reference height of 218px, with the remaining height allocated to the 3x3 wall. API behavior unchanged. Browser visual QA remains Not verified.
+
+## 상세 근거 디자인 복원 — HACKATHON-DAY
+Figma76:1608의 design context와 screenshot 확인. 고정340px 영상 대신 남은 높이를 채우는 큰 사건 영상,128px타임라인,155px관련 카메라 영역으로 조정했습니다. 중복 영상 재생 영역을 통합하고 위험도/근거/행동 카드 축소를 방지했습니다. 인계 입력은 접을 수 있어 기능을 유지합니다. 서버demo/CAM08에 기존 cam08-fall-detail.jpg 자산을 사용하며 실제근거·bbox는 생성하지 않습니다. API및행동 계약 유지. 빌드/타입PASS. 브라우저 시각geometry 검증은 도구 오류로 Not verified.

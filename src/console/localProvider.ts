@@ -1,3 +1,4 @@
+import type { DemoScenario } from '../scenario/types'
 // HACKATHON-DAY: pure local fixture source. Never requests backend media or APIs.
 import examples from '../fixtures/backend-api-v1.2.json'
 import type { AckBody, AckResponse, ApiIncident, ClipMetadata, ConsoleProvider, Snapshot, Suppressed } from '../contracts/api'
@@ -12,6 +13,8 @@ export function shouldAcceptSnapshot(current: Snapshot | null, next: Snapshot, f
 }
 
 export class LocalProvider implements ConsoleProvider {
+  constructor(private scenario:DemoScenario|null=null){}
+  async getScenario(){return this.scenario}
   readonly kind = 'local-fixture' as const
   private snapshot = clone(examples.snapshot_initial) as Snapshot
   private records = new Map<string, ApiIncident>()
@@ -26,8 +29,8 @@ export class LocalProvider implements ConsoleProvider {
     this.snapshot.level_counts = { critical:0, high:0, medium:0, low:0, review:0, unknown:0 }
     for (const i of active) this.snapshot.level_counts[i.needs_human_review ? 'review' : i.level.toLowerCase()]++
     this.snapshot.cameras = this.snapshot.cameras.map(c => {
-      const incident = this.snapshot.incidents.find(i => i.primary_cam === c.id || i.related_cams.includes(c.id))
-      return { ...c, bbox: [], status: incident ? incident.needs_human_review ? 'review' : 'incident' : c.analysis_status === 'not_analyzed' ? 'unobserved' : 'normal',
+      const incident = this.snapshot.incidents.find(i => i.primary_cam === c.id)
+      return { ...c, bbox: [], status: incident ? incident.needs_human_review ? 'review' : 'incident' : this.scenario || c.analysis_status === 'not_analyzed' ? 'unobserved' : 'normal',
         level: incident?.level ?? null, suppressed: this.excluded.some(s => s.cam_id === c.id && !s.restored) }
     })
   }
@@ -46,6 +49,16 @@ export class LocalProvider implements ConsoleProvider {
       this.records.set(i.id,i)
     }
     if (step === 2) this.excluded.push({ id:'SUP-001', cam_id:'CAM_04', stage1_label:'Possible fall', ai_verdict:'normal', reason:'합성 데모: 자세를 낮춘 뒤 다시 걸음', risk:8, resumed_walking:true, restored:false })
+    if(this.scenario){
+      this.records.clear();this.excluded=[]
+      this.snapshot.cameras=this.snapshot.cameras.map(c=>({...c,location:this.scenario!.cameras.find(x=>x.id===c.id)?.region??null}))
+      for(const e of this.scenario.incidents.filter(e=>e.enabled&&step>=e.min_step)){
+        const a=e.risk_axes
+        const score=a&&Object.values(a).every(v=>v!==null)?Math.round(100*(.35*a.severity!+.30*a.imminence!+.20*a.exposure!+.15*a.persistence!)):null
+        const base=clone(examples.incident_demo) as ApiIncident
+        this.records.set(e.id,{...base,id:e.id,sample_id:'scripted-'+e.id,type:e.type,title:e.title,primary_cam:e.primary_cam,related_cams:e.members.filter(c=>c!==e.primary_cam),risk:score,level:score===null?'UNKNOWN':score>=85?'CRITICAL':score>=65?'HIGH':score>=40?'MEDIUM':'LOW',risk_axes:a,confidence:e.confidence,needs_human_review:e.needs_human_review,evidence:[],timeline:[],related_views:[],ai_opinion:'시나리오 지정 판단 · AI 분석 결과가 아닙니다.',created_at:new Date().toISOString()})
+      }
+    }
     this.rebuild()
   }
   async getSnapshot() { return clone(this.snapshot) }

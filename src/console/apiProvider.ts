@@ -1,3 +1,4 @@
+import type { DemoScenario } from '../scenario/types'
 // HACKATHON-DAY: same-origin HTTP and WebSocket transport.
 import type { AckBody, AckResponse, ApiIncident, ClipMetadata, ConsoleProvider, Snapshot, Suppressed } from '../contracts/api'
 export class ApiError extends Error {
@@ -31,6 +32,7 @@ export class ApiProvider implements ConsoleProvider {
   }catch(e){if(e instanceof ApiError)throw e;throw new ApiError('network_error','서버 연결에 실패했거나 요청 시간이 초과되었습니다.')}
   finally{clearTimeout(timer)}
  }
+ async getScenario(){const data=await this.request<{configured:boolean;scenario:DemoScenario|null}>('/api/demo/scenario');return data.configured?data.scenario:null}
  async getSnapshot(){return parseSnapshot(await this.request<unknown>('/api/snapshot'))}
  getIncident(id:string){return this.request<ApiIncident>('/api/incidents/'+encodeURIComponent(id))}
  getSuppressed(){return this.request<Suppressed[]>('/api/suppressed')}
