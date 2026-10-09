@@ -1,5 +1,9 @@
-﻿import { build } from 'vite'
+import { build } from 'vite'
 import { execFileSync } from 'node:child_process'
 import { resolve } from 'node:path'
-await build({ configFile:false, build:{outDir:'.test-dist',lib:{entry:resolve('tests/local-provider.test.ts'),formats:['es'],fileName:()=> 'local-provider.test.mjs'},rollupOptions:{external:['node:test','node:assert/strict']}} })
-execFileSync(process.execPath,['--test',resolve('.test-dist/local-provider.test.mjs')],{stdio:'inherit'})
+const integration=process.argv.includes('--integration')
+const entries=integration?['api-integration']:['local-provider','api-provider']
+for(const name of entries){
+ await build({configFile:false,build:{outDir:'.test-dist',emptyOutDir:false,lib:{entry:resolve('tests/'+name+'.test.ts'),formats:['es'],fileName:()=>name+'.test.mjs'},rollupOptions:{external:['node:test','node:assert/strict']}}})
+ execFileSync(process.execPath,['--test',resolve('.test-dist/'+name+'.test.mjs')],{stdio:'inherit'})
+}

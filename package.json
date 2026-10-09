@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview",
-    "test": "node scripts/test-local.mjs"
+    "test": "node scripts/test-local.mjs",
+    "test:integration": "node scripts/test-local.mjs --integration"
   },
   "dependencies": {
     "react": "^19.3.0",

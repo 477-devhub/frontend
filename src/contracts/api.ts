@@ -32,7 +32,7 @@ export interface ClipMetadata {
   source: 'incident_source' | 'camera_file'
 }
 export interface ConsoleProvider {
-  readonly kind: 'local-fixture'
+  readonly kind: 'local-fixture' | 'api'
   loadScene(step: number): Promise<void>
   getSnapshot(): Promise<Snapshot>
   getIncident(id: string): Promise<ApiIncident>
