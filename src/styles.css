@@ -1784,5 +1784,90 @@ button:disabled { opacity:.5; cursor:not-allowed; }
 .detail-right,.detail-left,.queue { overflow-y:auto; }
 .detail-title { flex-wrap:wrap; }
 .operator-label { display:flex; align-items:center; gap:8px; margin:12px 0; }
-.hero p { padding:12px; }
+
 .next-action { gap:12px; }
+
+/* HACKATHON-DAY API media */
+.evidence-image {max-width:100%; max-height:240px; object-fit:contain;}
+.tile video {z-index:1;}
+.tile-shade,.tile-label,.tile-chip,.tile-time {pointer-events:none;}
+.moments video {width:100%; position:static; max-height:360px;}
+
+
+/* HACKATHON-DAY: preserve canvas geometry with bounded status rows. */
+.header,.offline-bar,.connection-banner,.action-feedback {flex-shrink:0;}
+.offline-bar {gap:10px; padding:6px 24px; min-height:34px; font-size:11px;}
+.offline-bar .btn {padding:4px 8px; font-size:11px;}
+.connection-banner,.action-feedback {padding:6px 24px; font-size:11px;}
+.left,.queue,.detail-left,.detail-right {min-height:0;}
+.left {overflow:visible;}
+.tile-lg {flex:none; height:340px; min-height:240px;}
+@media (min-width:1181px) {
+ .wall {flex:none;}
+ .analysis {flex-shrink:0;}
+ .offline-bar {flex-wrap:nowrap;}
+ .header-inner {gap:10px;}
+ .status-site {display:none;}
+}
+@media (max-width:1180px) {
+ .left,.queue,.detail-left,.detail-right {overflow:visible;}
+ .tile-lg {height:auto; min-height:0; aspect-ratio:16/9;}
+}
+
+
+/* HACKATHON-DAY: connection tools and notices must not consume canvas rows. */
+.app {position:relative;}
+.header-tools {position:relative; font-size:11px;}
+.header-tools summary {cursor:pointer; white-space:nowrap;}
+.connection-tools {position:absolute; right:0; top:28px; z-index:50; width:300px; padding:14px; display:flex; flex-direction:column; gap:12px; border:1px solid var(--line2); border-radius:10px; background:var(--ink); box-shadow:0 8px 24px #0006;}
+.connection-tools label {display:flex; gap:8px; align-items:center;}
+.connection-tools select {color:var(--t1); background:var(--ink2); padding:6px; border:1px solid var(--line2);}
+.connection-tools a {color:var(--indigo);}
+.console-notices {position:absolute; top:72px; right:24px; z-index:40; width:min(440px,calc(100% - 48px)); display:flex; flex-direction:column; gap:6px; pointer-events:none;}
+.console-notices:empty {display:none;}
+.console-notices > div {border:1px solid var(--line2); border-radius:8px; box-shadow:0 4px 16px #0004;}
+
+/* HACKATHON-DAY: restore original Figma hero geometry. */
+.hero,.queue-empty,.today,.incident,.excluded {flex-shrink:0;}
+.hero p {padding:0;}
+.hero-field {align-self:flex-start;}
+.incident-body .evidence-image {width:80px; height:63px; object-fit:cover; border-radius:8px;}
+
+/* HACKATHON-DAY: fit the CCTV wall without an inner scrollbar. */
+@media (min-width:1181px) {
+  .left {overflow:hidden;}
+  .left > .wall {flex:1; min-height:0;}
+  .left > .analysis {flex:0 0 218px; height:218px; min-height:218px;}
+  .wall-head {flex-shrink:0;}
+  .wall > .grid {flex:1; min-height:0; grid-auto-rows:minmax(0,1fr);}
+  .wall .tile-md {height:100%; min-height:0;}
+}
+
+/* HACKATHON-DAY: Figma 76:1608 detail proportions, data supplied by API. */
+.detail-video {position:relative; min-height:0; border-radius:10px; overflow:hidden;}
+.detail-video > .tile-lg {height:100%; min-height:0; flex:none;}
+.detail-camera-meta {font-size:12px; color:var(--t3); white-space:nowrap;}
+.detail-title h1 {overflow:hidden; text-overflow:ellipsis;}
+.timeline-empty {display:block; padding-top:18px; font-size:12px; color:var(--t3);}
+.detail-primary-actions {display:flex; gap:8px;}
+.detail-primary-actions .btn {flex:1; min-width:0;}
+.handover-tools summary {cursor:pointer; font-size:12px; color:var(--t2);}
+@media (min-width:1181px) {
+ .detail-left {overflow:hidden;}
+ .detail-left > .detail-title {flex:none; flex-wrap:nowrap;}
+ .detail-video {flex:1;}
+ .detail-left > .moments {flex:0 0 128px;}
+ .detail-left > .same-event {flex:0 0 155px; min-height:155px;}
+ .detail-right > .risk {flex:none;}
+ .detail-right > .why {flex-shrink:0;}
+ .detail-right > .next-action {flex-shrink:0; gap:8px;}
+}
+@media (max-width:1180px) {
+ .detail-video {height:auto; aspect-ratio:16/9;}
+ .detail-camera-meta {white-space:normal;}
+}
+
+.playback-controls {display:flex; flex-direction:column; gap:8px;}
+.playback-controls > div {display:flex; gap:6px;}
+.same-event .tile-sm {width:150px; height:84px;}
+.same-event-text {min-width:0;}

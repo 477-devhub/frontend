@@ -1,9 +1,11 @@
 import type { Snapshot } from '../contracts/api'
+import dot from '../assets/dot-ok-6.svg'
 export function AnalysisPanel({snapshot}:{snapshot:Snapshot}){
+ const counts=[snapshot.configured_cameras,snapshot.observed_cameras,snapshot.suppressed_count,snapshot.active_count]
+ const labels=['등록 카메라','처리 입력 카메라','제외 알림','확인 필요']
  return <section className="card analysis">
-  <div className="analysis-head"><h2>관제 상태</h2><span className="muted">로컬 snapshot · 실측 추론 통계 아님</span></div>
-  <div className="analysis-body"><div className="funnel"><h3>현재 구성</h3><dl className="funnel-rows">
-   {[['등록 카메라',snapshot.configured_cameras],['처리 입력의 카메라',snapshot.observed_cameras],['확인 대기',snapshot.active_count],['제외 알림',snapshot.suppressed_count]].map(([label,count])=><div className="funnel-row" key={label}><dt>{label}</dt><dd>{count}</dd></div>)}
-  </dl></div><div className="divider-v"/><div className="trace"><h3>측정 정보</h3><p>평균 처리 시간 <strong>—</strong></p><p>단계별 처리 시간 <strong>미제공</strong></p><p>영상 및 분석 API 미연결</p><p className="footnote">미측정 값을 0초나 임의 평균으로 표시하지 않습니다.</p></div></div>
+  <div className="analysis-head"><h2>AI 분석 현황</h2><span className="muted">현재 등록 화면에서 지금 볼 곳까지</span><span className="spacer"/><span className="analysis-state"><img src={dot} alt=""/><b>{snapshot.is_demo?'합성 데모':'개발 입력'}</b><span className="muted">· 처리 시간 미측정</span></span></div>
+  <div className="analysis-body"><div className="funnel"><h3>관제 상태 · 등록 {snapshot.configured_cameras}대</h3><dl className="funnel-rows">{counts.map((count,i)=><div key={labels[i]} className="funnel-row" data-stage={i} data-active={count>0||undefined}><dt>{labels[i]}</dt><div className="track"><div className="bar" style={{width:Math.min(100,Math.sqrt(count/Math.max(1,snapshot.configured_cameras))*100)+'%'}}/></div><dd>{count}</dd></div>)}</dl><p className="takeaway"><img src={dot} alt=""/>{snapshot.active_count? snapshot.active_count+'곳 확인 필요':'현재 확인 대기 사건 없음'}</p></div>
+  <div className="divider-v"/><div className="trace"><h3>처리 경과 · 실측 정보 대기</h3><ol className="timeline">{['의심 구간 감지','맥락 분석','위험도 판단','큐 등록'].map((label,i)=><li key={label} className="timeline-item" data-tone="idle">{i>0&&<div className="timeline-link"><span className="timeline-line"/><span>—</span></div>}<div className="timeline-node"><span className="timeline-dot"/><b>{label}</b><span className="timeline-time">—</span></div></li>)}</ol><div className="trace-summary"><span>평균 처리 시간</span><b>—</b><span className="chip">미측정</span></div></div></div>
  </section>
 }
